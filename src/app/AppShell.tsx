@@ -7,9 +7,61 @@ import { WorkbenchPage } from "./WorkbenchPage";
 
 type ActiveView =
   | { name: "workbench" }
+  | { name: "library" }
+  | { name: "calendar" }
+  | { name: "retrospectives" }
+  | { name: "settings" }
   | { name: "studio"; projectId: string };
 
-const navigationItems = ["工作台", "素材库", "发布日历", "复盘库", "设置"];
+type NavigationView = Exclude<ActiveView["name"], "studio">;
+
+const navigationItems: Array<{ label: string; view: NavigationView }> = [
+  { label: "工作台", view: "workbench" },
+  { label: "素材库", view: "library" },
+  { label: "发布日历", view: "calendar" },
+  { label: "复盘库", view: "retrospectives" },
+  { label: "设置", view: "settings" }
+];
+
+const placeholderViews: Record<
+  Exclude<NavigationView, "workbench">,
+  {
+    title: string;
+    description: string;
+  }
+> = {
+  library: {
+    title: "素材库",
+    description: "素材库即将接入"
+  },
+  calendar: {
+    title: "发布日历",
+    description: "发布日历即将接入"
+  },
+  retrospectives: {
+    title: "复盘库",
+    description: "复盘库即将接入"
+  },
+  settings: {
+    title: "设置",
+    description: "设置即将接入"
+  }
+};
+
+function createNavigationView(view: NavigationView): ActiveView {
+  switch (view) {
+    case "workbench":
+      return { name: "workbench" };
+    case "library":
+      return { name: "library" };
+    case "calendar":
+      return { name: "calendar" };
+    case "retrospectives":
+      return { name: "retrospectives" };
+    case "settings":
+      return { name: "settings" };
+  }
+}
 
 export function AppShell() {
   const [activeView, setActiveView] = useState<ActiveView>({ name: "workbench" });
@@ -56,11 +108,12 @@ export function AppShell() {
         <nav>
           {navigationItems.map((item) => (
             <button
-              className={item === "工作台" ? "active" : ""}
-              key={item}
+              className={activeView.name === item.view ? "active" : ""}
+              key={item.view}
+              onClick={() => setActiveView(createNavigationView(item.view))}
               type="button"
             >
-              {item}
+              {item.label}
             </button>
           ))}
         </nav>
@@ -77,12 +130,14 @@ export function AppShell() {
             onRefresh={reloadWorkbench}
             workbench={workbench}
           />
-        ) : (
+        ) : activeView.name === "studio" ? (
           <ProductionStudioPage
             onBack={() => setActiveView({ name: "workbench" })}
             onRefreshWorkbench={reloadWorkbench}
             projectId={activeView.projectId}
           />
+        ) : (
+          <PlaceholderView view={activeView.name} />
         )}
       </section>
 
@@ -105,6 +160,22 @@ export function AppShell() {
         </aside>
       )}
     </main>
+  );
+}
+
+function PlaceholderView({
+  view
+}: {
+  view: Exclude<NavigationView, "workbench">;
+}) {
+  const content = placeholderViews[view];
+
+  return (
+    <section className="shell-placeholder-view">
+      <p className="eyebrow">Coming Soon</p>
+      <h1>{content.title}</h1>
+      <p>{content.description}</p>
+    </section>
   );
 }
 
