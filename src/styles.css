@@ -1119,6 +1119,141 @@ textarea {
   filter: brightness(1.05);
 }
 
+/* Secondary navigation pages */
+.secondary-page {
+  display: grid;
+  gap: 18px;
+}
+
+.secondary-page-header {
+  padding: 26px 26px 0;
+}
+
+.secondary-page-header > p:last-child {
+  max-width: 720px;
+  margin: 10px 0 0;
+  color: var(--app-muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.secondary-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--app-line);
+  border-radius: var(--radius-2xl);
+  background: var(--app-line);
+  overflow: hidden;
+  box-shadow: var(--app-shadow-md);
+}
+
+.secondary-summary-grid > div {
+  padding: 18px 20px;
+  background: var(--app-surface);
+}
+
+.secondary-summary-grid span {
+  display: block;
+  color: var(--app-muted);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.secondary-summary-grid strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--app-ink);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 1.35rem;
+  font-weight: 620;
+}
+
+.secondary-list,
+.settings-endpoints {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--app-line);
+  border-radius: var(--radius-2xl);
+  background: var(--app-surface);
+  box-shadow: var(--app-shadow-sm);
+}
+
+.secondary-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(220px, 0.8fr);
+  gap: 16px;
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--app-line);
+  border-radius: var(--radius-lg);
+  background: var(--app-surface-2);
+  color: var(--app-ink);
+  text-align: left;
+  transition: all 160ms ease;
+}
+
+.secondary-row:hover {
+  transform: translateY(-1px);
+  border-color: var(--app-accent);
+  box-shadow: var(--app-shadow-sm);
+}
+
+.secondary-row > div {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.secondary-row strong {
+  overflow: hidden;
+  font-size: 0.98rem;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.secondary-row span {
+  overflow: hidden;
+  color: var(--app-muted);
+  font-size: 0.82rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.secondary-empty {
+  margin: 0;
+  padding: 18px;
+  border: 1px dashed var(--app-line-strong);
+  border-radius: var(--radius-lg);
+  color: var(--app-muted);
+  background: var(--app-surface);
+}
+
+.settings-endpoints h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.settings-endpoints ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.settings-endpoints li {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--app-surface-2);
+  color: var(--app-muted);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.82rem;
+}
+
 .project-create-panel button[type="submit"]:disabled {
   opacity: 0.55;
   cursor: not-allowed;

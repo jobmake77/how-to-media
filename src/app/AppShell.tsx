@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 import { api } from "../api";
 import { AiQueuePanel } from "../features/ai/AiQueuePanel";
 import type { WorkbenchState } from "../types";
+import {
+  MaterialLibraryPage,
+  PublishCalendarPage,
+  RetrospectiveLibraryPage,
+  SettingsPage
+} from "./NavigationPages";
 import { ProductionStudioPage } from "./ProductionStudioPage";
 import { WorkbenchPage } from "./WorkbenchPage";
 
@@ -22,31 +28,6 @@ const navigationItems: Array<{ label: string; view: NavigationView }> = [
   { label: "复盘库", view: "retrospectives" },
   { label: "设置", view: "settings" }
 ];
-
-const placeholderViews: Record<
-  Exclude<NavigationView, "workbench">,
-  {
-    title: string;
-    description: string;
-  }
-> = {
-  library: {
-    title: "素材库",
-    description: "素材库即将接入"
-  },
-  calendar: {
-    title: "发布日历",
-    description: "发布日历即将接入"
-  },
-  retrospectives: {
-    title: "复盘库",
-    description: "复盘库即将接入"
-  },
-  settings: {
-    title: "设置",
-    description: "设置即将接入"
-  }
-};
 
 function createNavigationView(view: NavigationView): ActiveView {
   switch (view) {
@@ -137,7 +118,15 @@ export function AppShell() {
             projectId={activeView.projectId}
           />
         ) : (
-          <PlaceholderView view={activeView.name} />
+          <SecondaryContent
+            activeView={activeView.name}
+            error={error}
+            loading={loading}
+            onOpenProject={(projectId) =>
+              setActiveView({ name: "studio", projectId })
+            }
+            workbench={workbench}
+          />
         )}
       </section>
 
@@ -160,22 +149,6 @@ export function AppShell() {
         </aside>
       )}
     </main>
-  );
-}
-
-function PlaceholderView({
-  view
-}: {
-  view: Exclude<NavigationView, "workbench">;
-}) {
-  const content = placeholderViews[view];
-
-  return (
-    <section className="shell-placeholder-view">
-      <p className="eyebrow">Coming Soon</p>
-      <h1>{content.title}</h1>
-      <p>{content.description}</p>
-    </section>
   );
 }
 
@@ -211,4 +184,56 @@ function WorkbenchContent({
       workbench={workbench}
     />
   );
+}
+
+function SecondaryContent({
+  activeView,
+  error,
+  loading,
+  onOpenProject,
+  workbench
+}: {
+  activeView: Exclude<NavigationView, "workbench">;
+  error: string;
+  loading: boolean;
+  onOpenProject: (projectId: string) => void;
+  workbench: WorkbenchState | null;
+}) {
+  switch (activeView) {
+    case "library":
+      return (
+        <MaterialLibraryPage
+          error={error}
+          loading={loading}
+          onOpenProject={onOpenProject}
+          workbench={workbench}
+        />
+      );
+    case "calendar":
+      return (
+        <PublishCalendarPage
+          error={error}
+          loading={loading}
+          onOpenProject={onOpenProject}
+          workbench={workbench}
+        />
+      );
+    case "retrospectives":
+      return (
+        <RetrospectiveLibraryPage
+          error={error}
+          loading={loading}
+          onOpenProject={onOpenProject}
+          workbench={workbench}
+        />
+      );
+    case "settings":
+      return (
+        <SettingsPage
+          error={error}
+          loading={loading}
+          workbench={workbench}
+        />
+      );
+  }
 }
